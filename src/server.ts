@@ -7,13 +7,15 @@ import db from "./config/db"
 
 // Conectar a BD
 async function connectDB() {
+    console.log(colors.yellow(`Intentando conectar a BD: ${process.env.DATABASE_URL}`))
     try {
         await db.authenticate()
-        db.sync()
+        await db.sync()
         console.log(colors.blue('Conexión exitosa a la BD'))
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         console.log(colors.red.white('Hubo un error al conectar a la BD'))
+        process.exit(1)
     }    
 }
 connectDB()
@@ -37,6 +39,9 @@ server.use(cors(corsOptions))
 server.use(express.json())
 
 server.use(morgan('dev'))
+server.get('/', (req, res) => {
+    res.send('API funcionando correctamente')
+})
 server.use('/api/products', router)
 
 
