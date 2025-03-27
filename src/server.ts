@@ -23,10 +23,13 @@ connectDB()
 // Instancia de Express
 const server = express()
 
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL)
+
 //Permitir conexiones
 const corsOptions: CorsOptions = {
-    origin:function(origin, callback){        
-        if(!origin || origin === process.env.FRONTEND_URL){
+    origin:function(origin, callback){ 
+        const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:4000']       
+        if(!origin || allowedOrigins.includes(origin)){
             callback(null, true)
         } else{
             callback(new Error('Error de CORS'))
